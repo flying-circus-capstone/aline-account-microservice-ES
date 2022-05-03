@@ -1,7 +1,7 @@
 # Account Microservice
 
 server:
-  port: 8072
+  port: ${APP_PORT}
 
 spring:
   application:
@@ -10,14 +10,14 @@ spring:
     hibernate:
       ddl-auto: update
   datasource:
-    username: root
-    password: Es7585**
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://localhost:3306/alinedb"
+    url: "jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}"
     initialization-mode: always
 
 app:
   security:
-    secret-key: "r5u8x/A?D(G+KaPdSgVkYp3s6v9y$B&E"
+    secret-key: ${ENCRYPT_SECRET_KEY}
     jwt:
-      secret-key: "a37c1ab3-2744-4407-92ca-acb87a3ea5ec"
+      secret-key: ${JWT_SECRET_KEY}

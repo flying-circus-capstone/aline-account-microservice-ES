@@ -24,7 +24,9 @@ pipeline {
             }
         }
         stage ('test env') {
-            echo "${env.HOME}"
+            steps {
+                echo "${env.HOME}"
+            }
         }
     }
 }

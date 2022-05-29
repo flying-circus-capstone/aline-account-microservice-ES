@@ -11,9 +11,14 @@ pipeline {
                 git branch: 'develop', credentialsId: 'login-PAK', url: 'https://github.com/flying-circus-capstone/aline-account-microservice-ES.git'
             }
         }
-        stage('build') {
+        stage('build jar') {
             steps {
                 sh 'mvn clean package -DskipTests'
+            }
+        }
+        stage('build image') {
+            steps {
+                sh 'docker build -t account-microservice .'
             }
         }
     }

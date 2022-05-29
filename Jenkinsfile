@@ -23,5 +23,8 @@ pipeline {
                 sh 'docker build -t account-microservice .'
             }
         }
+        stage ('test env') {
+            echo "${env.HOME}"
+        }
     }
 }

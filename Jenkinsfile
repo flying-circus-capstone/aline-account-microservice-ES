@@ -42,7 +42,10 @@ pipeline {
             }
         }
         stage('push image') {
-            sh "docker push ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com/aline-account-microservice:latest"
+            agent any
+            steps {
+                sh "docker push ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com/aline-account-microservice:latest"
+            }
         }
     }
 }

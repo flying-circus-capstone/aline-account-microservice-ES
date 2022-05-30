@@ -35,5 +35,14 @@ pipeline {
                 sh 'docker build -t account-microservice .'
             }
         }
+        stage('tag image') {
+            agent any
+            steps {
+                sh "docker tag account-microservice ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com/aline-account-microservice:latest"
+            }
+        }
+        stage('push image') {
+            sh "docker push ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com/aline-account-microservice:latest"
+        }
     }
 }

@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage ('AWS login'){
             steps {
-                withCredentials([[credentialsId: 'aws-creadentials-EliasSaundersSS']]) {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aws-creadentials-EliasSaundersSS', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
                     AWS "ecr get-login-password --region ${AWS_REG} | docker login --username AWS --password-stdin ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com"
                 }
             }

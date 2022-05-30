@@ -1,9 +1,13 @@
 pipeline {
     agent any
+    environment {
+        AWS_REG = ${env.AWS_REG}
+        AWS_ID_NUM = ${env.AWS_ID_NUM}
+    }
     stages {
         stage ('AWS login'){
             steps {
-                credentialsId: 'aws-credentials-EliasSaundersSS' sh  "aws ecr get-login-password --region ${env.AWS_REG} | docker login --username AWS --password-stdin ${env.AWS_ID_NUM}.dkr.ecr.${env.AWS_REG}.amazonaws.com"
+                credentialsId: 'aws-credentials-EliasSaundersSS' sh  "aws ecr get-login-password --region ${AWS_REG} | docker login --username AWS --password-stdin ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com"
             }
         }
         stage('pull') {

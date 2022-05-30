@@ -25,7 +25,7 @@ pipeline {
         }
         stage ('test env') {
             steps {
-                echo "${env.HOME}"
+                echo "${env.TEST}"
             }
         }
     }

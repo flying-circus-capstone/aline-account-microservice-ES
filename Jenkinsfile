@@ -7,7 +7,9 @@ pipeline {
     stages {
         stage ('AWS login'){
             steps {
-                credentialsId: 'aws-credentials-EliasSaundersSS' sh  "aws ecr get-login-password --region ${AWS_REG} | docker login --username AWS --password-stdin ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com"
+                script {
+                    credentialsId: 'aws-credentials-EliasSaundersSS' sh  "aws ecr get-login-password --region ${AWS_REG} | docker login --username AWS --password-stdin ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com"
+                }
             }
         }
         stage('pull') {

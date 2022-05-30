@@ -3,7 +3,6 @@ pipeline {
     environment {
         AWS_REG = "${env.AWS_REG}"
         AWS_ID_NUM = "${env.AWS_ID_NUM}"
-        stage('pull') {
     }
     stages {
         stage ('AWS login'){

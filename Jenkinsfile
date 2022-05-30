@@ -1,3 +1,4 @@
+@Library('github.com/releaseworks/jenkinslib') _
 pipeline {
     agent any
     environment {
@@ -7,8 +8,8 @@ pipeline {
     stages {
         stage ('AWS login'){
             steps {
-                script {
-                    credentialsId: 'aws-credentials-EliasSaundersSS' sh  "aws ecr get-login-password --region ${AWS_REG} | docker login --username AWS --password-stdin ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com"
+                withCredentials([[credentialsId: 'aws-creadentials-EliasSaundersSS']]) {
+                    AWS "ecr get-login-password --region ${AWS_REG} | docker login --username AWS --password-stdin ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com"
                 }
             }
         }

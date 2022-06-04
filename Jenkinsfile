@@ -13,11 +13,6 @@ pipeline {
                 }
             }
         }
-        stage('pull') {
-            steps {
-                git branch: 'develop', credentialsId: 'login-PAK', url: 'https://github.com/flying-circus-capstone/aline-account-microservice-ES.git'
-            }
-        }
         stage('build jar') {
             agent {
                 docker {

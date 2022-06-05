@@ -19,27 +19,10 @@ pipeline {
             }
         }
         stage('test') {
-            agent {
-                docker {
-                    image 'maven:3.8.5'
-                    args '-v /root/.m2:/root/.m2'
-                }
-            }
             steps {
                 withSonarQubeEnv(installationName: 'SQ1'){
                     sh 'mvn clean verify sonar:sonar -Dmaven.test.failure.ignore=true'
                 }
-            }
-        }
-        stage('build jar') {
-            agent {
-                docker {
-                    image 'maven:3.8.5'
-                    args '-v /root/.m2:/root/.m2'
-                }
-            }
-            steps {
-                sh 'mvn clean package -DskipTests'
             }
         }
         stage('build image') {

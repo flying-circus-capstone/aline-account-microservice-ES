@@ -13,11 +13,6 @@ pipeline {
                 }
             }
         }
-        stage ('Core check') {
-            steps {
-                sh 'ls core/'
-            }
-        }
         stage('test') {
             steps {
                 withSonarQubeEnv(installationName: 'SQ1'){

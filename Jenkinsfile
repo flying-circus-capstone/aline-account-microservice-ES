@@ -13,9 +13,9 @@ pipeline {
                 }
             }
         }
-        stage('pull') {
+        stage ('Core check') {
             steps {
-                git branch: 'develop', credentialsId: 'login-PAK', url: 'https://github.com/flying-circus-capstone/aline-account-microservice-ES.git'
+                sh 'ls core/'
             }
         }
         stage('test') {
@@ -23,6 +23,11 @@ pipeline {
                 withSonarQubeEnv(installationName: 'SQ1'){
                     sh 'mvn clean verify sonar:sonar -Dmaven.test.failure.ignore=true'
                 }
+            }
+        }
+        stage('Build Jar') {
+            steps {
+                sh 'mvn clean package -DskipTests'
             }
         }
         stage('build image') {

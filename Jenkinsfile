@@ -13,7 +13,7 @@ pipeline {
                 }
             }
         }
-        stage('test') {
+        stage('Sonarqube Test') {
             steps {
                 withSonarQubeEnv(installationName: 'SQ1'){
                     sh 'mvn clean verify sonar:sonar -Dmaven.test.failure.ignore=true'

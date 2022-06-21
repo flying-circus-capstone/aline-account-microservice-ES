@@ -13,11 +13,21 @@ pipeline {
                 }
             }
         }
+        stage ('MVN Test') {
+            steps {
+                sh 'mvn test -Dmaven.test.failure.ignore=true'
+            }
+        }
         stage('Sonarqube Test') {
             steps {
                 withSonarQubeEnv(installationName: 'SQ1'){
                     sh 'mvn clean verify sonar:sonar -Dmaven.test.failure.ignore=true'
                 }
+            }
+        }
+        stage('Quality Gate') {
+            steps {
+                waitForQualityGate abortPipeline: true
             }
         }
         stage('Build Jar') {
@@ -32,7 +42,7 @@ pipeline {
         }
         stage('tag image') {
             steps {
-                sh "docker tag account-microservice ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com/aline-account-microservice:latest"
+                sh "docker tag account-microservice ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com/aline-account-microservice:pipeline-latest"
             }
         }
         stage('push') {

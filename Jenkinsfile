@@ -51,6 +51,7 @@ pipeline {
         }
         stage('build image') {
             steps {
+                sh 'docker context use default'
                 sh 'docker build -t account-microservice .'
             }
         }
@@ -61,7 +62,18 @@ pipeline {
         }
         stage('push') {
             steps {
-                sh "docker push ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com/aline-account-microservice:latest"
+                sh "docker push ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com/aline-account-microservice:pipeline-latest"
+            }
+        }
+        stage('ECS context creation') {
+            steps {
+                sh 'if [ -z "$(docker context ls | grep "jenkinsecs")" ]; then docker context create ecs jenkinsecs --from-env; fi'
+                sh "docker context use jenkinsecs"
+            }
+        }
+        stage('Docker Compose Up') {
+            steps {
+                sh "docker compose --file ./Docker-Compose-ES/Compose-ECS/compose.yaml --project-name aline-ECS-ES up -d"
             }
         }
     }

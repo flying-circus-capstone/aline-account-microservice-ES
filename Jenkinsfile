@@ -2,8 +2,22 @@
 pipeline {
     agent any
     environment {
-        AWS_REG = "${env.AWS_REG}"
+        AWS_REGION = "${env.AWS_REG}"
         AWS_ID_NUM = "${env.AWS_ID_NUM}"
+        DB_NAME = "${env.DB_NAME}"
+        DB_HOST = "${env.DB_HOST}"
+        DB_PORT = "${env.DB_PORT}"
+        DB_USER = "${env.DB_USER}"
+        DB_PASSWORD = "${env.DB_PASSWORD}"
+        AWS_ECR = "${env.AWS_ECR}"
+        VPC_ID = "${env.VPC_ID}"
+        MICRO_SG = "${env.MICRO_SG}"
+        ENCRYPT_SECRET_KEY = "${env.ENCRYPT_SECRET_KEY}"
+        JWT_SECRET_KEY = "${env.JWT_SECRET_KEY}"
+        APP_SERVICE_HOST = "${env.APP_SERVICE_HOST}"
+        LB_ARN = "${env.LB_ARN}"
+        AWS_ACCESS_KEY_ID = "${AWS_ACCESS_KEY_ID}"
+        AWS_SECRET_ACCESS_KEY = "${AWS_SECRET_ACCESS_KEY}"
     }
     stages {
         stage ('AWS login'){

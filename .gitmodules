@@ -1,3 +1,6 @@
 [submodule "core"]
 	path = core
 	url = https://github.com/flying-circus-capstone/core
+[submodule "Docker-Compose-ES"]
+	path = Docker-Compose-ES
+	url = https://github.com/flying-circus-capstone/Docker-Compose-ES

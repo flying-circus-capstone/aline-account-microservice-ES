@@ -1,15 +1,11 @@
 @Library('github.com/releaseworks/jenkinslib') _
 pipeline {
     agent any
-    environment {
-        AWS_REG = "${env.AWS_REG}"
-        AWS_ID_NUM = "${env.AWS_ID_NUM}"
-    }
     stages {
         stage ('AWS login'){
             steps {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    sh "aws ecr get-login-password --region ${AWS_REG} | docker login --username AWS --password-stdin ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com"
+                    sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ID_NUM}.dkr.ecr.${AWS_REGION}.amazonaws.com"
                 }
             }
         }
@@ -21,7 +17,7 @@ pipeline {
         stage('Sonarqube Test') {
             steps {
                 withSonarQubeEnv(installationName: 'SQ1'){
-                    sh 'mvn clean verify sonar:sonar -Dmaven.test.failure.ignore=true'
+                    sh 'mvn sonar:sonar -Dmaven.test.failure.ignore=true'
                 }
             }
         }
@@ -37,17 +33,29 @@ pipeline {
         }
         stage('build image') {
             steps {
+                sh 'docker context use default'
                 sh 'docker build -t account-microservice .'
             }
         }
         stage('tag image') {
             steps {
-                sh "docker tag account-microservice ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com/aline-account-microservice:pipeline-latest"
+                sh "docker tag account-microservice ${AWS_ID_NUM}.dkr.ecr.${AWS_REGION}.amazonaws.com/aline-account-microservice:pipeline-latest"
             }
         }
         stage('push') {
             steps {
-                sh "docker push ${AWS_ID_NUM}.dkr.ecr.${AWS_REG}.amazonaws.com/aline-account-microservice:latest"
+                sh "docker push ${AWS_ID_NUM}.dkr.ecr.${AWS_REGION}.amazonaws.com/aline-account-microservice:pipeline-latest"
+            }
+        }
+        stage('ECS context creation') {
+            steps {
+                sh 'if [ -z "$(docker context ls | grep "jenkinsecs")" ]; then docker context create ecs jenkinsecs --from-env; fi'
+                sh "docker context use jenkinsecs"
+            }
+        }
+        stage('Docker Compose Up') {
+            steps {
+                sh "docker compose --file ./Docker-Compose-ES/Compose-ECS/compose.yaml --project-name aline-ECS-ES up -d"
             }
         }
     }

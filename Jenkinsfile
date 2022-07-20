@@ -39,12 +39,12 @@ pipeline {
         }
         stage('tag image') {
             steps {
-                sh "docker tag account-microservice ${AWS_ID_NUM}.dkr.ecr.${AWS_REGION}.amazonaws.com/aline-account-microservice:pipeline-latest"
+                sh "docker tag account-microservice ${AWS_ID_NUM}.dkr.ecr.${AWS_REGION}.amazonaws.com/aline-account-microservice:${VERSION_TAG}"
             }
         }
         stage('push') {
             steps {
-                sh "docker push ${AWS_ID_NUM}.dkr.ecr.${AWS_REGION}.amazonaws.com/aline-account-microservice:pipeline-latest"
+                sh "docker push ${AWS_ID_NUM}.dkr.ecr.${AWS_REGION}.amazonaws.com/aline-account-microservice:${VERSION_TAG}"
             }
         }
         stage('ECS context creation') {

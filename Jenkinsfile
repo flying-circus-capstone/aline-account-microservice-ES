@@ -56,9 +56,9 @@ pipeline {
         stage('Docker Compose Up') {
             steps {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'aws-credentials', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                    sh 'if [ -q "$(aws ecs describe-clusters --cluster aline-ecs-es | grep "status": "ACTIVE")" ]; then docker compose --file ./Docker-Compose-ES/Compose-ECS/compose.yaml --project-name aline-ecs-es up -d; fi'
-                    sh 'if [ -q "$(aws ecs describe-clusters --cluster aline-ecs-es | grep "reason": "MISSING")" ]; then docker compose --file ./Docker-Compose-ES/Compose-ECS/compose.yaml --project-name aline-ecs-es up -d; fi'
-                    sh 'if [ -z "$(aws ecs describe-clusters --cluster aline-ecs-es | grep "status": "ACTIVE")" ]; then sleep 5m; docker compose --file ./Docker-Compose-ES/Compose-ECS/compose.yaml --project-name aline-ecs-es up -d; fi'
+                    sh 'if [ "$(aws ecs describe-clusters --cluster aline-ecs-es | grep ""status": "ACTIVE"",)" ]; then docker compose --file ./Docker-Compose-ES/Compose-ECS/compose.yaml --project-name aline-ecs-es up -d; fi'
+                    sh 'if [ "$(aws ecs describe-clusters --cluster aline-ecs-es | grep ""reason": "MISSING"")" ]; then docker compose --file ./Docker-Compose-ES/Compose-ECS/compose.yaml --project-name aline-ecs-es up -d; fi'
+                    sh 'if [ -z "$(aws ecs describe-clusters --cluster aline-ecs-es | grep ""status": "ACTIVE"")" ]; then sleep 5m; docker compose --file ./Docker-Compose-ES/Compose-ECS/compose.yaml --project-name aline-ecs-es up -d; fi'
                 }
             }
         }
